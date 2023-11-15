@@ -2,7 +2,14 @@
  * DateSelector is a component for displaying a calendar view of a current date.
  */
 import { useState } from "react";
-import { startOfMonth, getDay, getDaysInMonth } from "date-fns";
+import {
+  startOfMonth,
+  getDay,
+  getDaysInMonth,
+  getMonth,
+  getYear,
+  getDate,
+} from "date-fns";
 import "./DateSelector.css";
 // calendar has 7 columns and 4 or 5 rows
 const DateSelector = ({ currentDate, onChange }) => {
@@ -17,11 +24,22 @@ const DateSelector = ({ currentDate, onChange }) => {
   const firstDayOfMonth = startOfMonth(currentDate);
   const dayOfTheWeek = getDay(firstDayOfMonth);
   const startOfMonthPaddding = DAY_PADDING.slice(0, dayOfTheWeek);
-  const [selectedDay, setSelectedDay] = useState("");
-  const updateSelectedDay = (event) => {
-    setSelectedDay(event.target.innerText);
+
+  const [selectedDate, setSelectedDate] = useState("");
+  const [selectedDay, setSelectedDay] = useState(getDate(currentDate));
+  const [selectedMonth, setSelectedMonth] = useState(getMonth(currentDate));
+  const [selectedYear, setSelectedYear] = useState(getYear(currentDate));
+
+  const updateSelectedDay = ({ target }) => {
+    setSelectedDay(target.value);
+    // setSelectedDate(new Date(selectedYear, selectedMonth, selectedDay));
+    console.log(selectedDate);
+    // console.log(
+    //   "currentDate formatted",
+    //   new Date(selectedYear, selectedMonth, selectedDay)
+    // );
   };
-  console.log(dayOfTheWeek);
+  // console.log(dayOfTheWeek);
 
   const totalDays = getDaysInMonth(currentDate);
   const dayArray = days.slice(0, totalDays);
@@ -38,13 +56,15 @@ const DateSelector = ({ currentDate, onChange }) => {
         ))}
         {dayArray.map((day) => {
           return (
-            <button key={day} onClick={(event) => updateSelectedDay(event)}>
+            <button key={day} value={day} onClick={updateSelectedDay}>
               {day}
             </button>
           );
         })}
       </span>
-      <span>{selectedDay}</span>
+      <span>
+        {new Date(selectedYear, selectedMonth, selectedDay).toLocaleString()}
+      </span>
     </span>
   ) : null;
 };
