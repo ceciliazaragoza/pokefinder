@@ -28,8 +28,30 @@
   color: #61dafb;
 }
 
+/* have to put opacity in both, need to transition to hidden and to being visible */
+.queryPrompt {
+  transition: opacity 1s;
+}
+
+.visibleQueryPrompt {
+  opacity: 1;
+}
+
+.hiddenQueryPrompt {
+  opacity: 0;
+}
+
+.loader {
+  /* we don't want acceleration, so do linear */
+  animation: 1s linear infinite spin;
+  font-size: 48px;
+  text-align: center;
+  transform: rotate(45deg);
+}
+
 /* this is animation css */
-@keyframes App-logo-spin {
+/* keyframes is plan for animation. saying that you want element to go from one state to another */
+@keyframes spin {
   from {
     transform: rotate(0deg);
   }
