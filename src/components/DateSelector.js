@@ -25,26 +25,31 @@ const DateSelector = ({ currentDate, onChange }) => {
   const dayOfTheWeek = getDay(firstDayOfMonth);
   const startOfMonthPaddding = DAY_PADDING.slice(0, dayOfTheWeek);
 
-  const [selectedDate, setSelectedDate] = useState("");
   const [selectedDay, setSelectedDay] = useState(getDate(currentDate));
   const [selectedMonth, setSelectedMonth] = useState(getMonth(currentDate));
-  const [selectedYear, setSelectedYear] = useState(getYear(currentDate));
+  // selectedMonth keeps track of year, so we only need a variable to store the selectedYear when we create new Date
+  const selectedYear = getYear(currentDate);
 
   const updateSelectedDay = ({ target }) => {
     setSelectedDay(target.value);
-    // setSelectedDate(new Date(selectedYear, selectedMonth, selectedDay));
-    console.log(selectedDate);
-    // console.log(
-    //   "currentDate formatted",
-    //   new Date(selectedYear, selectedMonth, selectedDay)
-    // );
   };
-  // console.log(dayOfTheWeek);
+
+  const decrementSelectedMonth = () => {
+    setSelectedMonth(selectedMonth - 1);
+  };
+
+  const incrementSelectedMonth = (event) => {
+    setSelectedMonth(selectedMonth + 1);
+  };
 
   const totalDays = getDaysInMonth(currentDate);
-  const dayArray = days.slice(0, totalDays);
+  const totalDaysArray = days.slice(0, totalDays);
   return currentDate ? (
     <span className="dateSelector">
+      <span className="arrows">
+        <button onClick={decrementSelectedMonth}>left</button>
+        <button onClick={incrementSelectedMonth}>right</button>
+      </span>
       <span className="month">
         {/* arrow functions have minimalist syntax where if nature of function 
         allows you to form expression for return value quickly, don't need curly braces */}
@@ -54,7 +59,7 @@ const DateSelector = ({ currentDate, onChange }) => {
         {startOfMonthPaddding.map((pad) => (
           <span key={pad}></span>
         ))}
-        {dayArray.map((day) => {
+        {totalDaysArray.map((day) => {
           return (
             <button key={day} value={day} onClick={updateSelectedDay}>
               {day}
@@ -63,6 +68,7 @@ const DateSelector = ({ currentDate, onChange }) => {
         })}
       </span>
       <span>
+        {/* do .toLocaleString() because react doesn't want to display date, get error with children */}
         {new Date(selectedYear, selectedMonth, selectedDay).toLocaleString()}
       </span>
     </span>
